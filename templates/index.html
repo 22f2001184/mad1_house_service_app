@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h3 class="display-5">Looking for?</h3>
+    <div class="service-list">
+        
+        {% for service in services %}
+        <a href="{{url_for('show_service_to_user', id=service.id)}}">
+            <div class="btn" style="width: 18rem;">
+                <img src="{{service.url}}" 
+     class="card-img-top" 
+     alt="Image of {{service.name}}" 
+     style="object-fit: cover; width: 300px; height: 220px;">
+                <div class="card-body">
+                <h5 class="card-title">{{service.name}}</h5>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+{% block style %}
+    <style>
+        .service-list {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap; /* Add this line */
+            justify-content: center; /* Optional, to center the cards */
+            align-items: center;
+            gap: 40px; 
+        }
+        .display-5{
+            text-align: center;
+        }
+        .card-body {
+            padding-top: 20px; /* Adjust the padding value */
+        }
+        .card-img-top {
+            border-radius: 20px;
+            transition: transform 0.3s ease-in-out; /* Add this line */
+        }
+        
+        .card-img-top:hover {
+            transform: scale(1.1); /* Scale up on hover */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a shadow on hover */
+        }
+        h3.display-5{
+            color: rgb(65, 105, 225);
+        }
+        body {
+            background-color: #bdcbd7;
+        }
+        
+    </style>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <h2 class="display-2 name">Best {{ service.name }} Packages</h2>
+    <p>{{ service.description.title() }}</p>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ID</th>
+      <th>Service Description</th>
+      <th>Address</th>
+      <th>Service Name</th>
+      <th>Professional Name</th>
+      <th>Experience</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+    {% for user_ in users %}
+      {% if service.name == user_.service_name and user_.status == 'approved' %}
+        <tr>
+          <td>{{ user_.id }}</td>
+          <td>{{ user_.service_description }}</td>
+          <td>{{ user_.address }} ({{ user_.pincode }})</td>
+          <td>{{ service.name }}</td>
+          <td>{{ user_.name }}</td>
+          <td>{{ user_.experience }} Years</td>
+          <td>&#8377;{{ service.base_price + (user_.experience * 50) }}</td>
+          <td>
+            <form method="post">
+              <a href="{{ url_for('book_post', s_id=service.id, p_id=user_.id) }}" class="btn btn-outline-primary">
+                Book
+              </a>
+            </form>
+          </td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block style %}
+  <style>
+    h2.display-2.name {
+      color: rgb(65, 105, 225);
+    }
+    p {
+      color: darkblue; /* Blue */
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+{% endblock %}

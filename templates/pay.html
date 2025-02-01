@@ -1,0 +1,130 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<!-- pay.html -->
+
+<!-- Header Section -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-4 text-center">Payment Page</h1>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<!-- User Information Section -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Payment Details</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Payment To:</strong> {{ professional.name }}</p>
+                    <p><strong>Service Name:</strong> {{ service.name }}</p>
+                    <p><strong>Amount:</strong> ₹{{ price }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Form Section -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Make Payment</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/make_payment" method="post">
+                        <input type="hidden" name="service_id" value="{{ service.id }}">
+                        <input type="hidden" name="professional_id" value="{{ service.professional_id }}">
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input type="number" class="form-control" id="amount" name="amount" value="{{ price }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="payment_method">Payment Method:</label>
+                            <select class="form-control" id="payment_method" name="payment_method">
+                                <option value="card">Card</option>
+                                <option value="net_banking">Net Banking</option>
+                                <option value="upi">UPI</option>
+                                <option value="cod">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <a href="{{url_for('close_service', id=service_request.id)}}" class="btn btn-primary">Make Payment</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}
+<style>
+    /* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.display-4 {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.offset-md-3 {
+    margin-left: 25%;
+}
+
+.form-control {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #3e8e41;
+}
+</style>
+{% endblock %}

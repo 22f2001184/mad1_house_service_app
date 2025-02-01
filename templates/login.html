@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Login Page
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="display-1 text-center mb-4">Login</h1>
+
+    <div class="container square-login">
+        <form action="" class="form" method="post">
+            <a href="{{url_for('register_professional')}}" id="pro_reg" class="d-block mb-4">Register as Professional</a>
+            <div class="form-group mb-3">
+                <label for="email" class="form-label">Registered Email ID</label>
+                <input type="email" name="email" required class="form-control">
+            </div>
+            <div class="form-group mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" required class="form-control">
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <a href="{{url_for('register_customer')}}" id="cus_reg" class="d-block mt-2 text-center">Create Account?</a>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1.display-1 {
+            color: rgb(65, 105, 225);
+        }
+        #pro_reg{
+            color: rgb(50, 205, 50);
+        }
+        #cus_reg{
+            color: rgb(255, 99, 71);
+        }
+        .square-login {
+            width: 500px;
+            height: 350px;
+            border: 1px solid lightskyblue;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(10, 51, 255, 0.2);
+            margin: 0 auto;
+            background-image: linear-gradient(to bottom right, #e5e5e5, lightskyblue);
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+{% endblock %}

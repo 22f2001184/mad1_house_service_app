@@ -1,0 +1,17 @@
+<!-- view_document.html -->
+
+<canvas id="pdf-canvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<script>
+    var pdfUrl = "{{ url_for('view_document', id=id) }}";
+    pdfjsLib.getDocument(pdfUrl).then(function(pdf) {
+        pdf.getPage(1).then(function(page) {
+            var canvas = document.getElementById("pdf-canvas");
+            var context = canvas.getContext('2d');
+            canvas.height = page.getViewport(1).height;
+            canvas.width = page.getViewport(1).width;
+            page.render({canvasContext: context, viewport: page.getViewport(1)});
+        });
+    });
+</script>

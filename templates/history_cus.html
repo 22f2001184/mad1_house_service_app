@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2 class="display-2">Service History</h2>
+
+<button class="btn btn-primary" onclick="window.print();">
+    <i class="fas fa-print"></i>
+    Print
+</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Service Id</th>
+            <th>Service Name</th>
+            <th>Professional Name</th>
+            <th>Phone no.</th>
+            <th>Service Charged</th>
+            <th>Date Of Request</th>
+            <th>Date Of Completion</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service_request in service_requests %}
+        <tr>
+            <td>
+                {{service_request.id}}
+            </td>
+            <td>
+                {% for service in services %}
+                    {% if service.id==service_request.service_id %}
+                        {{service.name}}
+                    {% endif %} 
+                {% endfor %}
+            </td>
+            <td>
+                {% for user_ in users %}
+                    {% if user_.id==service_request.professional_id %}
+                        {{user_.name}}
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for user_ in users %}
+                    {% if user_.id==service_request.professional_id %}
+                        {{user_.phone}}
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for service in services %}
+                    {% if service.id==service_request.service_id %}
+                        {% for user_ in users %}
+                            {% if user_.id==service_request.professional_id %}
+                                &#8377;{{ service.base_price + (user_.experience * 50) }}
+                            {% endif %}
+                        {% endfor %}
+                    
+                    {% endif %} 
+                {% endfor %}
+            </td>
+            <td>
+                {% for service in services %}
+                    {% if service.id==service_request.service_id %}
+                        {% for user_ in users %}
+                            {% if user_.id==service_request.professional_id %}
+                            {{ service_request.date_of_request.strftime("%d/%m/%Y") }}
+                            {% endif %}
+                        {% endfor %}
+                    
+                    {% endif %} 
+                {% endfor %}
+            </td>
+            <td>
+                {% for service in services %}
+                {% if service.id == service_request.service_id %}
+                    {% for user_ in users %}
+                        {% if user_.id == service_request.professional_id %}
+                            {% if service_request.date_of_completion %}
+                                {{ service_request.date_of_completion.strftime("%d/%m/%Y") }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                
+                {% endif %} 
+            {% endfor %}
+            </td>
+            <td>
+                {% if service_request.status == 'rejected' %}
+                <span style="color: red;">Rejected</span>
+                {% else %}
+                {{service_request.status}}
+                {% endif %}
+            </td>
+            <td>
+                {% if service_request.status == 'requested' %}
+                <a href="{{url_for('cancel_service', id=service_request.id)}}" class="btn btn-outline-danger">
+                    Cancel Request
+                </a>
+                {% elif service_request.status == 'done' %}
+                <a href="{{url_for('pay', id=service_request.id)}}" class="btn btn-outline-success">
+                    Close it?
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

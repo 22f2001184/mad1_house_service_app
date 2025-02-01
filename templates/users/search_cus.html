@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="" method="GET">
+                <div class="input-group">
+                    <select name="parameter" id="parameter" class="parameter form-select">
+                        <option value="service_name" {% if parameter == 'service_name' %}selected{% endif %}>Service name</option>
+                        <option value="pin_code" {% if parameter == 'pin_code' %}selected{% endif %}>Pin Code</option>
+                        <option value="price" {% if parameter == 'price' %}selected{% endif %}>Price</option>
+                    </select>
+                    <input type="text" value="{{ query }}" name="query" class="form-control w-50" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <a href="{{url_for('search_customer')}}" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>
+                            Clear</a>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                            Search</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        {% if parameter =='service_name'and query != '' %}
+            {% if services %}
+                <h2 class="display-2">Best {{ services[0].name }} Packages</h2>
+            {% else %}
+                <h2 class="display-2">No Service Found</h2>
+            {% endif %}
+        {% endif %}
+    </thead>
+    <tbody>
+        {% if query != '' %}
+            {% for service in services %}
+                {% if (parameter == 'pin_code') or (parameter == 'service_name') or (parameter == 'price' and service.base_price <= query) %}
+                    {% for user_ in users %}
+                        {% if service.name == user_.service_name %}
+                            <tr>
+                                <td>{{ user_.id }}</td>
+                                <td>{{ user_.service_description }}</td>
+                                <td>{{ user_.address}} ({{ user_.pincode}})</td>
+                                <td>{{ service.name }}</td>
+                                <td>&#8377;{{ service.base_price + (user_.experience * 50) }}</td>
+                                <td>
+                                    <a href="{{ url_for('book_post', s_id=service.id, p_id=user_.id) }}" class="btn btn-outline-primary">
+                                        Book
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Profile Page
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="display-1">
+        Hello 
+        <span class="text-muted" >@{{user.name}}</span>
+    </h1>
+    <div class="profile-pic">
+        <img src="https://api.dicebear.com/6.x/lorelei/svg?seed={{user.username}}" width="100" alt="profile pic">
+    </div>
+    <a href="{{url_for('logout')}}" class="btn btn-outline-danger">Logout</a>
+    <!-- form to change password and username -->
+    <form action="" class="form" method="post">
+        <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" name="username" required class="form-control" value="{{user.username}}">
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">Email ID</label>
+            <input type="email" name="email" required class="form-control" value="{{user.email}}">
+        </div>
+        <div class="form-group">
+            <label for="c_password" class="form-label">Current Password</label>
+            <input type="password" name="c_password" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">New Password</label>
+            <input type="password" name="password" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="name" class="form-label">Fullname</label>
+            <input type="text" name="name" id="name" required class="form-control" value="{{user.name}}">
+        </div>
+        <div class="form-group">
+            <label for="address" class="form-label">Address</label>
+            <textarea name="address" id="address" class="form-control" rows="5">{{user.address}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="phone" class="form-label">Contact Phone no:</label>
+            <input type="tel" name="phone" id="phone" class="form-control" value="{{user.phone}}" required>
+        </div>
+        <div class="form-group">
+            <label for="pincode" class="form-label">Pin Code</label>
+            <input type="number" name="pincode" id="pincode" class="form-control" min="0" value="{{user.pincode}}">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary mt-3">Update</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1.display-1 {
+            color: rgb(65, 105, 225);
+        }
+        
+    </style>
+{% endblock %}

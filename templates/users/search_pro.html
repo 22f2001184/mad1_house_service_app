@@ -1,0 +1,111 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="" method="GET">
+                <div class="input-group">
+                    <select name="parameter" id="parameter" class="parameter form-select">
+                        {% for parameter in parameters %}
+                            {% if param and parameter == param %}
+                                <option value="{{ parameter }}" selected>{{ parameters[parameter] }}</option>
+                            {% else %}
+                                <option value="{{ parameter }}">{{ parameters[parameter] }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input type="text" {% if query %}value="{{ query }}"{% endif %} name="query" class="form-control w-50" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <a href="{{ url_for('search_professional') }}" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>
+                            Clear</a>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                            Search</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if service_requests and users and query !="" %}
+    <h2 class="display-2">Search Results</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Service Id</th>
+                <th>Customer Name</th>
+                <th>Contact Phone</th>
+                <th>Location(with pin code)</th>
+                <th>Date</th>
+                <th>Remarks</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service_request in service_requests %}
+                {% if (service_request.status in ['closed','rejected']) and service_request.professional_id==user.id %}
+
+                {% for user_ in users %}
+                    {% if user_.id==service_request.customer_id and user_.role=='customer' %}
+                        <tr>
+                            <td>
+                                    {{ service_request.id }}
+                            </td>
+                            <td>
+                                {{ user_.name }}
+                            </td>
+                            <td>
+                                {{ user_.phone }}
+                            </td>
+                            <td>
+                                {{ user_.address }} ({{ user_.pincode }})
+                            </td>
+                            <td>
+                                {{ service_request.date_of_request.strftime('%d/%m/%y') }}
+                            </td>
+                            <td>
+                                {{ service_request.remarks }}           
+                            </td>
+                            <td>
+                                {% if service_request.status == 'rejected' %}
+                                    <span style="color: red;">Rejected</span>
+                                        {% else %}
+                                            <div class="star-rating">
+                                                {% for review in reviews %}
+                                                    {% if review.service_request_id == service_request.id %}
+                                                        {% for i in range(5) %}
+                                                            {% if i < review.rating %}
+                                                                &#9733;
+                                                            {% else %}
+                                                                <span class="unrated">&#9734;</span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
+
+{% block style %}
+<style>
+    .star-rating {
+        color: #FFD700 !important; /* Yellow color code */
+    }
+      
+    .star-rating .unrated {
+        color: #ccc !important; /* Gray color code */
+    }
+</style>
+{% endblock %}

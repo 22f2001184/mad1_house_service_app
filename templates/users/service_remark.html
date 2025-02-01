@@ -1,0 +1,128 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    New Service
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="display-1 text-center">Service Remarks</h1>
+
+                <form id="service-remarks-form" action="" method="post">
+                    <dl class="row">
+                        <dt class="col-sm-3"><label for="name">Service Name:</label></dt>
+                        <dd class="col-sm-9">{{ service.name }}</dd>
+
+                        <dt class="col-sm-3"><label for="description">Description:</label></dt>
+                        <dd class="col-sm-9">{{ service.description }}</dd>
+
+                        <dt class="col-sm-3"><label for="date">Date of Request:</label></dt>
+                        <dd class="col-sm-9">{{ service_request.date_of_request.strftime('%d/%m/%Y') }}</dd>
+
+                        <dt class="col-sm-3"><label for="date">Date of Completion:</label></dt>
+                        <dd class="col-sm-9">{{ date.today().strftime('%d/%m/%Y') }}</dd>
+
+                        <dt class="col-sm-3"><label for="professional-id">Professional ID:</label></dt>
+                        <dd class="col-sm-9">{{ service_request.professional_id }}</dd>
+
+                        <dt class="col-sm-3"><label for="professional-name">Professional Name:</label></dt>
+                        <dd class="col-sm-9">
+                            {% for user_ in users %}
+                                {% if user_.id == service_request.professional_id %}
+                                    {{ user_.name }}
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+
+                        <dt class="col-sm-3"><label for="contact-no">Contact No.:</label></dt>
+                        <dd class="col-sm-9">
+                            {% for user_ in users %}
+                                {% if user_.id == service_request.professional_id %}
+                                    {{ user_.phone }}
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                    </dl>
+
+                    <div class="rating text-center">
+                        <h4>Rate Your Experience:</h4>
+                        <span class="star" data-rating="1">&#9733;</span>
+                        <span class="star" data-rating="2">&#9733;</span>
+                        <span class="star" data-rating="3">&#9733;</span>
+                        <span class="star" data-rating="4">&#9733;</span>
+                        <span class="star" data-rating="5">&#9733;</span>
+                        <input type="hidden" id="rating" name="rating" value="0">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="remark" class="text-center">Remark (if any):</label>
+                        <textarea id="remark" name="remark" rows="5" cols="50" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-danger mt-3">Close</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block style %}
+<style>
+    .form-group label {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .star {
+        font-size: 30px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star:hover {
+        color: #ffc107;
+    }
+
+    .star.active {
+        color: #ffdf00;
+    }
+    .rating h4 {
+        display: inline;
+        margin-right: 10px;
+    }
+    h1.display-1{
+        color: rgb(65, 105, 225) ;
+    }
+    .container {
+        margin-top: 50px;
+    }
+</style>
+{% endblock %}
+{% block script %}
+    <script>
+        const ratingContainer = document.querySelector('.rating');
+        const stars = ratingContainer.querySelectorAll('.star');
+        const ratingInput = ratingContainer.querySelector('#rating');
+
+        ratingContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('star')) {
+                const rating = e.target.getAttribute('data-rating');
+                ratingInput.value = rating;
+
+                stars.forEach((star) => {
+                    star.classList.remove('active');
+                });
+
+                for (let i = 0; i < rating; i++) {
+                    stars[i].classList.add('active');
+                }
+
+                console.log(`Rated: ${rating}/5`);
+            }
+        });
+    </script>
+{% endblock %}

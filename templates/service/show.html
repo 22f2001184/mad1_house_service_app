@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Show Service
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-1">
+        Show Service 
+    </h1>
+    <div class="display-6">
+        <img src="{% if not service.url %}https://picsum.photos/id/{{service.id*5}}/200/200{% else %}{{service.url}}{% endif %}" 
+            class="card-img-top" 
+            alt="Image of {{service.name}}" 
+            style="object-fit: cover; width: 300px; height: 220px;">
+        <ul>
+            <li>
+                Service Name: {{service.name}}
+            </li>
+            <li>
+                Description: {{service.description}}
+            </li>
+            <li>
+                Base Price: &#8377;{{service.base_price}}
+            </li>
+        </ul>
+    </div>
+        
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1.display-1 {
+            color: rgb(65, 105, 225);
+        }
+    </style>
+{% endblock %}

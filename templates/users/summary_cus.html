@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2 class="display-2">Summary:</h2>
+<div style="display: flex; justify-content: space-around;">
+    <canvas id="myBarChart" style="width: 400px; height: 400px;"></canvas>
+</div>
+  
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+<script>
+    // Bar Chart
+    const barCtx = document.getElementById('myBarChart');
+  
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Requested', 'Closed','Assigned' ],
+        datasets: [{
+          label: '# of Requests',
+          data: {{service_request_status_sizes|safe}},
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+          ],
+          borderColor: [
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 99, 132)',
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Service Requests'
+          }
+        }
+      }
+    });
+</script>
+{% endblock %}
+
+{% block style %}
+    <style>
+        h2.display-2 {
+            color: rgb(65, 105, 225);
+        }
+    </style>
+{% endblock %}

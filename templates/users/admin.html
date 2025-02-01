@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-1">Admin Dashboard</h1>
+
+<h5 class="display-5">Services
+    <a href="{{url_for('add_service')}}" class="btn btn-success" style="float:right;">
+        <i class="fas fa-plus"></i>
+        New Service
+    </a>
+</h5>
+
+<div style="height: 300px; overflow-y: auto;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Service Id</th>
+                <th>Service Name</th>
+                <th>Base Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>
+                <a href="{{url_for('show_service', id=service.id)}}" >
+                    {{service.id}}
+                </a>
+                </td>
+                <td>{{service.name}}</td>
+                <td>&#8377;{{service.base_price}}</td>
+                <td>
+                    <a href="{{url_for('edit_service', id=service.id)}}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>
+                    <a href="{{url_for('delete_service', id=service.id)}}" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Professionals Table -->
+<h5 class="display-5">Professionals</h5>
+<div style="height: 300px; overflow-y: auto;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Professional Id</th>
+                <th>Name</th>
+                <th>Experience(Years)</th>
+                <th>Service Name</th>
+                <th>Document</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_ in users %}
+                {% if user_.role=='professional' %}
+                    <tr>
+                        <td>
+                        <a href="{{url_for('show_professional', id=user_.id)}}" >
+                            {{user_.id}}
+                        </a>
+                        </td>
+                        <td>{{user_.name}}</td>
+                        <td>{{user_.experience}}</td>
+                        <td>{{user_.service_name}}</td>
+                        <td>
+                            <a href="{{ url_for('view_document', id=user_.id) }}" title="View Document" target="_blank">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{url_for('approve', id=user_.id)}}" class="btn btn-outline-success {% if user_.status == 'approved' %}disabled{% endif %}">
+                                <i class="fas fa-check"></i>
+                                Approve
+                            </a>
+                            <a href="{{url_for('reject', id=user_.id)}}" class="btn btn-outline-danger {% if user_.status == 'rejected' %}disabled{% endif %}">
+                                <i class="fas fa-times"></i>
+                                Reject
+                            </a>
+                            <a href="{{url_for('delete_user', id=user_.id)}}" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Service Requests Table -->
+<h5 class="display-5">Service Requests</h5>
+<div style="height: 250px; overflow-y: auto; width: 100%; display: inline-block; margin-bottom: 50px;">
+    <table class="table" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Service Id</th>
+                <th>Assigned Professional</th>
+                <th>Requested Date</th>
+                <th>Date of Completion</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service_request in service_requests %}
+                {% for user_ in users %}
+                    {% if user_.id==service_request.professional_id %}
+                        <tr>
+                            <td>{{service_request.id}}</td>
+                            <td>{{user_.name}}</td>
+                            <td>{{service_request.date_of_request.strftime('%d/%m/%y')}}</td>
+                            <td>
+                                {% if service_request.date_of_completion %}
+                                    {{ service_request.date_of_completion.strftime('%d/%m/%y') }}
+                                {% endif %}
+                            </td>
+                            <td>{{service_request.status}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    
+    {% endblock %}
+    
+    {% block style %}
+        <style>
+            h1.display-1 {
+                color: rgb(65, 105, 225);
+            }
+        </style>
+    {% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Show Professional
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-1">
+        Show Professional
+    </h1>
+    <p class="{% if user_.status == 'approved' %}
+                    approved
+                    {% else %}
+                    rejected
+                    {% endif %}">
+                    @{{user_.status}}
+    </p>
+    <div class="display-6">
+        <div class="profile-pic">
+            <img src="https://api.dicebear.com/6.x/lorelei/svg?seed={{user_.username}}" width="100" alt="profile pic">
+        </div>
+        <ul>
+            <li>
+                Professional Name: {{user_.name}} 
+            </li>
+            <li>
+                Email ID: {{user_.email}}
+            </li>
+            <li>
+                Fullname: {{user_.name}}
+            </li>
+            <li>
+                Service Name: {{user_.service_name}}
+            </li>
+            <li>
+                Professional service description: {{user_.service_description}}
+            </li>
+            <li>
+                Experience: {{user_.experience}} Years
+            </li>
+            <li>
+                Address: {{user_.address}}
+            </li>
+            <li>
+                Contact No: {{user_.phone}}
+            </li>
+            <li>
+                Pin Code: {{user_.pincode}}
+            </li>
+            
+        </ul>
+    </div>
+        
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1.display-1 {
+            color: rgb(65, 105, 225);
+        }
+        .approved {
+            color: green;
+        }
+        
+        .rejected {
+            color: red;
+        }
+    </style>
+{% endblock %}
